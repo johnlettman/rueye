@@ -10,6 +10,10 @@ use crate::constants::return_values::*;
 use crate::types::{void, DOUBLE, HIDS, INT, UINT};
 use bitflags::bitflags;
 
+/// Enumeration of commands for [`is_Zoom`].
+///
+/// # Documentation
+/// [is_Zoom](https://www.1stvision.com/cameras/IDS/IDS-manuals/uEye_Manual/is_zoom.html)
 #[derive(Debug, Copy, Clone, PartialEq, Eq, Hash)]
 #[repr(u32)]
 pub enum ZOOM_CMD {
@@ -50,12 +54,16 @@ pub enum ZOOM_CMD {
     ///
     /// # Parameter type
     /// [`DOUBLE`]
-    ZOOM_CMD_DIGITAL_GET_VALUE_DEFAULT = 6, /* Get the default digital zoom factor. */
+    ZOOM_CMD_DIGITAL_GET_VALUE_DEFAULT = 6,
 }
 
 bitflags! {
     /// Zoom functions supported by the camera.
     ///
+    /// # Related commands
+    /// [`ZOOM_CMD_GET_CAPABILITIES`][ZOOM_CMD::ZOOM_CMD_GET_CAPABILITIES]
+    ///
+    /// # Documentation
     /// [is_Zoom: Status flags from ZOOM_CAPABILITY_FLAGS](https://www.1stvision.com/cameras/IDS/IDS-manuals/uEye_Manual/is_zoom.html#zoom_capability_flags)
     #[derive(Debug, Copy, Clone, PartialEq, Eq, Hash)]
     #[repr(transparent)]
