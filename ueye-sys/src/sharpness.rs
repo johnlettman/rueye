@@ -66,7 +66,7 @@ pub enum SHARPNESS_CMD {
 }
 
 bitflags! {
-    /// Sharpness support compatibility flags.
+    /// Sharpness support compatibility flags (_supports bitmask_).
     ///
     /// # Related commands
     /// * [`SHARPNESS_CMD_GET_CAPABILITIES`][SHARPNESS_CMD::SHARPNESS_CMD_GET_CAPABILITIES]
