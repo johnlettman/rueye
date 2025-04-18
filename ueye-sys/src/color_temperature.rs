@@ -75,6 +75,8 @@ bitflags! {
     ///
     /// # Documentation
     /// [is_ColorTemperature](https://www.1stvision.com/cameras/IDS/IDS-manuals/uEye_Manual/is_colortemperature.html)
+    #[derive(Debug, Copy, Clone, Hash, PartialEq, Eq)]
+    #[repr(transparent)]
     pub struct LENS_SHADING_MODELS: UINT {
         /// Color space with a white point of 3000 kelvins.
         const LSC_MODEL_AGL = 0x0001;
@@ -94,6 +96,8 @@ bitflags! {
 ///
 /// # Documentation
 /// [is_ColorTemperature](https://www.1stvision.com/cameras/IDS/IDS-manuals/uEye_Manual/is_colortemperature.html)
+#[derive(Debug, Copy, Clone, Hash, PartialEq, Eq)]
+#[repr(u32)]
 pub enum COLOR_TEMPERATURE_CMD {
     /// Sets a color temperature.
     ///
