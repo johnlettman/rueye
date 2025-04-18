@@ -6,6 +6,8 @@
 //! # Documentation
 //! [is_Zoom](https://www.1stvision.com/cameras/IDS/IDS-manuals/uEye_Manual/is_zoom.html)
 
+#![allow(non_camel_case_types)]
+
 use crate::constants::return_values::*;
 use crate::types::{void, DOUBLE, HIDS, INT, UINT};
 use bitflags::bitflags;
