@@ -37,5 +37,5 @@ unsafe extern "C" {
     ///
     /// # Documentation
     /// [is_GetImageMem](https://www.1stvision.com/cameras/IDS/IDS-manuals/uEye_Manual/is_getimagemem.html)
-    pub fn is_FreeImageMem(hCam: HIDS, pMem: *mut *const void) -> INT;
+    pub fn is_GetImageMem(hCam: HIDS, pMem: *mut *const void) -> INT;
 }
