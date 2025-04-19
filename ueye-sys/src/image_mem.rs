@@ -1,3 +1,5 @@
+//! Common image memory functions.
+
 use crate::constants::return_values::*;
 use crate::types::{char, void, HIDS, INT, UINT};
 
