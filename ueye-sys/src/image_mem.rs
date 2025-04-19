@@ -458,5 +458,38 @@ unsafe extern "C" {
     /// * [`is_ImageQueue`]
     /// * [`is_SetImageMem`]
     /// * [`is_SetAllocatedImageMem`]
+    ///
+    /// # Documentation
+    /// [is_AddToSequence](https://www.1stvision.com/cameras/IDS/IDS-manuals/uEye_Manual/is_addtosequence.html)
     pub fn is_AddToSequence(hCam: HIDS, pcMem: *const char, nMemId: INT) -> INT;
+
+    /// Removes all image memories from the sequence list that were added using
+    /// [`is_AddToSequence`].
+    ///
+    /// After a call of [`is_ClearSequence`], there is no more active image memory. To make an
+    /// image memory the active memory, call [`is_SetImageMem`].
+    ///
+    /// If image memories are locked by the user and are thus signaled as used, the image memories
+    /// cannot be removed from the sequence list. Therefore, before calling [`is_ClearSequence`],
+    /// all image memories locked using [`is_LockSeqBuf`] have to be unlocked using
+    /// [`is_UnlockSeqBuf`] first.
+    ///
+    /// # Input parameters
+    /// * `hCam` - Camera handle.
+    ///
+    /// # Return values
+    /// * [`IS_INVALID_CAMERA_HANDLE`]
+    /// * [`IS_NO_SUCCESS`]
+    /// * [`IS_SEQ_BUFFER_IS_LOCKED`]
+    /// * [`IS_SEQUENCE_LIST_EMPTY`]
+    /// * [`IS_SUCCESS`]
+    ///
+    /// # Related functions
+    /// * [`is_AllocImageMem`]
+    /// * [`is_FreeImageMem`]
+    /// * [`is_SetImageMem`]
+    ///
+    /// # Documentation
+    /// [is_ClearSequence](https://www.1stvision.com/cameras/IDS/IDS-manuals/uEye_Manual/is_clearsequence.html)
+    pub fn is_ClearSequence(hCam: HIDS) -> INT;
 }
