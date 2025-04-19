@@ -9,7 +9,7 @@
 #![allow(non_camel_case_types)]
 
 use crate::constants::return_values::*;
-use crate::types::{void, DOUBLE, HIDS, INT, UINT};
+use crate::types::{void, double, HIDS, INT, UINT};
 use bitflags::bitflags;
 
 /// Enumeration of commands for [`is_Zoom`].
@@ -34,19 +34,19 @@ pub enum ZOOM_CMD {
     /// Returns a list of supported zoom factors.
     ///
     /// # Parameter type
-    /// _Array of:_ [`DOUBLE`]
+    /// _Array of:_ [`double`]
     ZOOM_CMD_DIGITAL_GET_LIST = 2,
 
     /// Sets a zoom factor.
     ///
     /// # Parameter type
-    /// [`DOUBLE`]
+    /// [`double`]
     ZOOM_CMD_DIGITAL_SET_VALUE = 3,
 
     /// Returns the current zoom factor.
     ///
     /// # Parameter type
-    /// [`DOUBLE`]
+    /// [`double`]
     ZOOM_CMD_DIGITAL_GET_VALUE = 4,
 
     /// Returns the digital zoom factor range.
@@ -55,7 +55,7 @@ pub enum ZOOM_CMD {
     /// Returns the default value of the digital zoom.
     ///
     /// # Parameter type
-    /// [`DOUBLE`]
+    /// [`double`]
     ZOOM_CMD_DIGITAL_GET_VALUE_DEFAULT = 6,
 }
 
