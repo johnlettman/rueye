@@ -539,4 +539,62 @@ unsafe extern "C" {
         ppcMem: *mut *const char,
         ppcMemLast: *mut *const char,
     ) -> INT;
+
+    /// Locks write access to an image memory within a sequence.
+    ///
+    /// In the capturing process, locked image memories will be skipped in the sequence list of
+    /// image memories to be used. This way, you can avoid that image data which are required for
+    /// further processing will be overwritten by newly captured data. You can lock any number of
+    /// image memories at the same time.
+    ///
+    /// While the driver writes image data to an image memory, a call of [`is_LockSeqBuf`] for this
+    /// image memory fails. Therefore, it is strongly recommended to check the successful locking
+    /// by [`is_LockSeqBuf`] with the function's return value.
+    ///
+    /// Using the [`is_UnlockSeqBuf`] function, you can re-enable write access to the image memory.
+    ///
+    /// <div class="warning">
+    ///
+    /// Every successful call of [`is_LockSeqBuf`] must be accompanied by a call of
+    /// [`is_UnlockSeqBuf`]!
+    ///
+    /// </div>
+    ///
+    /// # Input parameters
+    /// * `hCam` - Camera handle.
+    /// * `nMemId` - Number of the image memory to be locked (`1`…max) or [`IS_IGNORE_PARAMETER`]:
+    ///     The image memory will be identified by its starting address only.
+    /// * `pcMem` - Starting address of the image memory to be locked.
+    ///
+    /// <div class="warning">
+    ///
+    /// `nMemId` indicates the location in the sequence list, not the memory ID assigned using
+    /// [`is_AllocImageMem`].
+    ///
+    /// </div>
+    ///
+    /// | `nMemId`                | `pcMem`  | Locks based on |
+    /// |-------------------------|----------|----------------|
+    /// | valid                   | valid    | `pcMem`        |
+    /// | valid                   | [`NULL`] | `nMemId`       |
+    /// | [`IS_IGNORE_PARAMETER`] | valid    | `pcMem`        |
+    /// | [`IS_IGNORE_PARAMETER`] | [`NULL`] | _Error_        |
+    ///
+    /// # Return values
+    /// * [`IS_BAD_STRUCTURE_SIZE`]
+    /// * [`IS_INVALID_CAMERA_HANDLE`]
+    /// * [`IS_INVALID_PARAMETER`]
+    /// * [`IS_NO_SUCCESS`]
+    /// * [`IS_SEQ_BUFFER_IS_LOCKED`]
+    /// * [`IS_SUCCESS`]
+    ///
+    /// # Related functions
+    /// * [`is_UnlockSeqBuf`]
+    /// * [`is_AddToSequence`]
+    /// * [`is_SetImageMem`]
+    /// * [`is_SetAllocatedImageMem`]
+    ///
+    /// # Documentation
+    /// [is_LockSeqBuf](https://www.1stvision.com/cameras/IDS/IDS-manuals/uEye_Manual/is_lockseqbuf.html)
+    pub fn is_LockSeqBuf(hCam: HIDS, nMemId: INT, pcMem: *const char) -> INT;
 }
