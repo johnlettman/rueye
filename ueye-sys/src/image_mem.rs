@@ -492,4 +492,51 @@ unsafe extern "C" {
     /// # Documentation
     /// [is_ClearSequence](https://www.1stvision.com/cameras/IDS/IDS-manuals/uEye_Manual/is_clearsequence.html)
     pub fn is_ClearSequence(hCam: HIDS) -> INT;
+
+    /// Determine the image memory which is currently used for capturing an image (`ppcMem`) or the
+    /// image memory that was last used for capturing an image (`ppcMemLast`).
+    ///
+    /// This function is only available if you have enabled ring buffering.
+    ///
+    /// All input parameters of a function have to be initialized with valid values before the
+    /// function is called; this also applies to parameters that are not used. Variables can be
+    /// preset with `0`, for example. For unused parameters, the [`NULL`] pointer has to be passed.
+    ///
+    /// This number is not the ID of the image memory that was allocated using the
+    /// [`is_AllocImageMem`] function, but the running number from the order in which memory was
+    /// allocated by the [`is_AddToSequence`] function.
+    ///
+    /// # Input parameters
+    /// * `hCam` - Camera handle.
+    /// * `pnNum` - Contains the number of the image memory currently used for image capturing.
+    ///     If image capturing is already in progress when [`is_GetActSeqBuf`] is called, `pnNum`
+    ///     will return the value `0` until the sequence arrives at the first image memory again.
+    /// * `ppcMem` - Contains the starting address of the image memory currently used for
+    ///     image capturing.
+    /// * `ppcMemLast` - Contains the starting address of the image memory last used for
+    ///     image capturing.
+    ///
+    /// # Return values
+    /// * [`IS_CANT_COMMUNICATE_WITH_DRIVER`]
+    /// * [`IS_CANT_OPEN_DEVICE`]
+    /// * [`IS_INVALID_CAMERA_HANDLE`]
+    /// * [`IS_INVALID_MEMORY_POINTER`]
+    /// * [`IS_INVALID_PARAMETER`]
+    /// * [`IS_IO_REQUEST_FAILED`]
+    /// * [`IS_NO_SUCCESS`]
+    /// * [`IS_SEQUENCE_LIST_EMPTY`]
+    /// * [`IS_SUCCESS`]
+    ///
+    /// # Related functions
+    /// * [`is_AddToSequence`]
+    /// * [`is_GetImageMem`]
+    ///
+    /// # Documentation
+    /// [is_GetActSeqBuf](https://www.1stvision.com/cameras/IDS/IDS-manuals/uEye_Manual/is_getactseqbuf.html)
+    pub fn is_GetActSeqBuf(
+        hCam: HIDS,
+        pnNum: *mut INT,
+        ppcMem: *mut *const char,
+        ppcMemLast: *mut *const char,
+    ) -> INT;
 }
