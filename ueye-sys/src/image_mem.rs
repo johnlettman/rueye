@@ -597,4 +597,39 @@ unsafe extern "C" {
     /// # Documentation
     /// [is_LockSeqBuf](https://www.1stvision.com/cameras/IDS/IDS-manuals/uEye_Manual/is_lockseqbuf.html)
     pub fn is_LockSeqBuf(hCam: HIDS, nMemId: INT, pcMem: *const char) -> INT;
+
+    /// Unlock a previously locked image memory in order to make it available again for storing
+    /// captured images.
+    ///
+    /// The image memory is re-inserted at its previous position in the sequence list.
+    ///
+    /// # Input parameters
+    /// * `hCam` - Camera handle.
+    /// * `nMemId` - Number of the image memory to unlock.
+    ///     When you pass [`IS_IGNORE_PARAMETER`], the image memory is only identified by its
+    ///     starting address. `nNum` identifies the position in the sequence list, not the memory
+    ///     ID assigned with [`is_AllocImageMem`].
+    /// * `pcMem` - Starting address of the image memory.
+    ///
+    /// | `nMemId`                | `pcMem`  | Locks based on |
+    /// |-------------------------|----------|----------------|
+    /// | valid                   | valid    | `pcMem`        |
+    /// | valid                   | [`NULL`] | `nMemId`       |
+    /// | [`IS_IGNORE_PARAMETER`] | valid    | `pcMem`        |
+    /// | [`IS_IGNORE_PARAMETER`] | [`NULL`] | _Error_        |
+    ///
+    /// # Return values
+    /// * [`IS_BAD_STRUCTURE_SIZE`]
+    /// * [`IS_INVALID_CAMERA_HANDLE`]
+    /// * [`IS_INVALID_PARAMETER`]
+    /// * [`IS_NO_SUCCESS`]
+    /// * [`IS_SUCCESS`]
+    ///
+    /// # Related functions
+    /// * [`is_LockSeqBuf`]
+    /// * [`is_ImageQueue`]
+    ///
+    /// # Documentation
+    /// [is_UnlockSeqBuf](https://www.1stvision.com/cameras/IDS/IDS-manuals/uEye_Manual/is_unlockseqbuf.html)
+    pub fn is_UnlockSeqBuf(hCam: HIDS, nMemId: INT, pcMem: *const char) -> INT;
 }
