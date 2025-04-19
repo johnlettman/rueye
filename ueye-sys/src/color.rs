@@ -203,4 +203,32 @@ unsafe extern "C" {
     /// # Documentation
     /// [is_SetColorMode](https://www.1stvision.com/cameras/IDS/IDS-manuals/uEye_Manual/is_setcolormode.html)
     pub fn is_SetColorMode(hCam: HIDS, Mode: INT) -> INT;
+
+    /// Retrieves the current Windows Desktop color setting and returns the bit depth per pixel and
+    /// the matching _uEye_ color mode.
+    ///
+    /// The color mode can be passed directly to the [`is_SetColorMode`] function.
+    /// You need to pass the bit depth when allocating an image memory.
+    ///
+    /// # Input parameters
+    /// * `hCam` - Camera handle.
+    /// * `pnCol` - Returns the bit depth of the color setting.
+    /// * `pnColMode` - Returns the _uEye_ color mode that corresponds to `pnCol`.
+    ///     For a list of all available color formats and the associated input parameters,
+    ///     see the [Appendix: color and Memory Formats](https://www.1stvision.com/cameras/IDS/IDS-manuals/uEye_Manual/sdk_allgemeines_farbformate.html) section.
+    ///
+    /// # Return values
+    /// * [`IS_INVALID_CAMERA_HANDLE`]
+    /// * [`IS_INVALID_PARAMETER`]
+    /// * [`IS_NO_SUCCESS`]
+    /// * [`IS_NOT_SUPPORTED`]
+    /// * [`IS_SUCCESS`]
+    ///
+    /// # Related functions
+    /// * [`is_SetColorMode`]
+    /// * [`is_AllocImageMem`]
+    ///
+    /// # Documentation
+    /// [is_GetColorDepth](https://www.1stvision.com/cameras/IDS/IDS-manuals/uEye_Manual/is_getcolordepth.html)
+    pub fn is_GetColorDepth(hCam: HIDS, pnCol: *mut INT, pnColMode: *mut INT) -> INT;
 }
