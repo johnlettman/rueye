@@ -4,7 +4,8 @@
 //! With version 4.50 new commands are added to the boot boost function so that the function can be
 //! synchronously enabled or disabled. This means that the function only returns when a change was
 //! performed for all affected cameras
-//! (IS_BOOTBOOST_CMD_ENABLE_AND_WAIT and IS_BOOTBOOST_CMD_DISABLE_AND_WAIT).
+//! ([`IS_BOOTBOOST_CMD_ENABLE_AND_WAIT`][BOOTBOOST_CMD::IS_BOOTBOOST_CMD_ENABLE_AND_WAIT] and
+//! [`IS_BOOTBOOST_CMD_DISABLE_AND_WAIT`][BOOTBOOST_CMD::IS_BOOTBOOST_CMD_DISABLE_AND_WAIT]).
 //! Using the IS_BOOTBOOST_CMD_WAIT command allows to synchronize changes of the boot boost
 //! configuration to an application.
 //!
@@ -35,9 +36,9 @@ pub const IS_BOOTBOOST_NONE: IS_BOOTBOOST_ID = 0;
 pub const IS_BOOTBOOST_ID_ALL: IS_BOOTBOOST_ID = 255;
 
 /// Default wait timeout for the boot boost 'wait operations':
-/// * [`BOOTBOOST_CMD::IS_BOOTBOOST_CMD_ENABLE_AND_WAIT`]
-/// * [`BOOTBOOST_CMD::IS_BOOTBOOST_CMD_DISABLE_AND_WAIT`]
-/// * [`BOOTBOOST_CMD::IS_BOOTBOOST_CMD_WAIT`]
+/// * [`IS_BOOTBOOST_CMD::IS_BOOTBOOST_CMD_ENABLE_AND_WAIT`]
+/// * [`IS_BOOTBOOST_CMD::IS_BOOTBOOST_CMD_DISABLE_AND_WAIT`]
+/// * [`IS_BOOTBOOST_CMD::IS_BOOTBOOST_CMD_WAIT`]
 pub const IS_BOOTBOOST_DEFAULT_WAIT_TIMEOUT_SEC: UINT = 60;
 
 #[derive(Debug, Clone)]
@@ -62,7 +63,7 @@ pub const IS_BOOTBOOST_IDLIST_ELEMENTSIZE: usize = size_of::<IS_BOOTBOOST_ID>();
 /// [is_BootBoost](https://www.1stvision.com/cameras/IDS/IDS-manuals/uEye_Manual/is_bootboost.html)
 #[derive(Debug, Copy, Clone, PartialEq, Eq, Hash)]
 #[repr(u32)]
-pub enum BOOTBOOST_CMD {
+pub enum IS_BOOTBOOST_CMD {
     /// Enable BootBoost.
     ///
     /// # Parameter type
@@ -151,9 +152,9 @@ unsafe extern "C" {
     ///
     /// # Input parameters
     /// * `hCam` - Camera handle.
-    /// * `nCommand` - Command. See [`BOOTBOOST_CMD`].
+    /// * `nCommand` - Command. See [`IS_BOOTBOOST_CMD`].
     /// * `pParam` - Pointer to a function parameter, whose function depends on `nCommand`.
-    /// * `nSizeOfParam` - Size (in bytes) of the memory area to which `pParam` refers.
+    /// * `cbSizeOfParam` - Size (in bytes) of the memory area to which `pParam` refers.
     ///
     /// # Return values
     /// * [`IS_INVALID_CAMERA_HANDLE`]
@@ -167,7 +168,7 @@ unsafe extern "C" {
     /// [is_BootBoost](https://www.1stvision.com/cameras/IDS/IDS-manuals/uEye_Manual/is_bootboost.html)
     pub fn is_BootBoost(
         hCam: HIDS,
-        nCommand: BOOTBOOST_CMD,
+        nCommand: IS_BOOTBOOST_CMD,
         pParam: *mut void,
         cbSizeOfParam: UINT,
     ) -> INT;
