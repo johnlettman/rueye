@@ -4,7 +4,7 @@
 
 use crate::color::is_SetColorMode;
 use crate::constants::return_values::*;
-use crate::types::{long, void, BOOL, FALSE, HDC, HIDS, HWND, INT, TRUE};
+use crate::types::{long, void, BOOL, FALSE, HDC, HIDS, HWND, INT, TRUE, ULONG};
 use bitflags::bitflags;
 
 /// Returns the R channel.
@@ -21,6 +21,29 @@ const IS_GET_KC_RGB: INT = 0x8003;
 const IS_GET_KC_INDEX: INT = 0x8004;
 const IS_GET_KEYOFFSET_X: INT = 0x8000;
 const IS_GET_KEYOFFSET_Y: INT = 0x8001;
+
+/// Initializes the manual steal mode.
+const IS_INIT_STEAL_VIDEO: INT = 1;
+
+/// Deinitializes the steal mode.
+const IS_EXIT_STEAL_VIDEO: INT = 2;
+
+/// Initializes the manual steal mode.
+const IS_INIT_STEAL_VIDEO_MANUAL: INT = 3;
+
+/// Initializes the automatic steal mode.
+const IS_INIT_STEAL_VIDEO_AUTO: INT = 4;
+
+/// Sets the proportion from number of images to VGA card and/or main memory
+/// (OR-operation with first three constants).
+const IS_SET_STEAL_RATIO: INT = 64;
+
+/// Acquisition of the Steal-Image in the same size of the corresponding image memory which is
+/// allocated for the image.
+const IS_USE_MEM_IMAGE_SIZE: INT = 128;
+const IS_STEAL_MODES_MASK: INT = 7;
+const IS_SET_STEAL_COPY: INT = 0x1000;
+const IS_SET_STEAL_NORMAL: INT = 0x2000;
 
 bitflags! {
     /// Render modes for [`is_RenderBitmap`].
@@ -611,4 +634,64 @@ unsafe extern "C" {
     #[cfg(target_os = "windows")]
     #[deprecated]
     pub fn is_OvlSurfaceOffWhileMove(hf: HIDS, boMode: BOOL) -> INT;
+
+    /// **Obsolete:** Prepares image acquisition in an image memory which has been allocated with
+    /// [`is_AllocImageMem`].
+    ///
+    /// During the display of a live image in DirectDraw mode, a number of images can be stolen
+    /// from the live image acquisition and be copied to an allocated area of memory. The live
+    /// image acquisition is halted only for this number of images.
+    ///
+    /// As an alternative an automatic steal mode can be used. And thus the number of images which
+    /// are alternately sent to VGA card and main memory can be set separately between
+    /// `1` and `255`. When starting the automatic steal mode the first image is sent to the VGA
+    /// card following alternately the set number of frames to the main memory and VGA card.
+    /// Image acquisition in steal mode can be combined with an image reflection around the
+    /// horizontal axis (see also [`is_SetRopEffect`]). For this purpose parameter `Mode` has to be
+    /// logical "or"-operated with one of the `MIRROR` constants. The mode set with function
+    /// [`is_SetRopEffect`] does not affect the “stealing” of the image. A desired ROP effect must
+    /// be set in [`is_PrepareStealVideo`] through this OR-Operation mentioned above.
+    ///
+    /// The steal mode can only be used in connection with the image acquisition modes
+    /// `IS_SET_CM_FRAME` or `IS_SET_CM_NEXT_FRAME` in the interlaced or non-interlaced
+    /// representation (see also [`is_SetCaptureMode`]).
+    ///
+    /// Using the sequence event (see also [`is_InitEvent`]) more events as the set number of
+    /// images acquisited in the image memory can be signalized in connection with the DirectDraw
+    /// primary surface mode.
+    ///
+    /// # Input parameters
+    /// * `hf` - Camera handle.
+    /// * `boMode` - Initialization or deinitialization of the mode:
+    ///     * Modes:
+    ///         * [`IS_INIT_STEAL_VIDEO`]
+    ///         * [`IS_INIT_STEAL_VIDEO_MANUAL`]
+    ///         * [`IS_INIT_STEAL_VIDEO_AUTO`]
+    ///         * [`IS_SET_STEAL_RATIO`]
+    ///         * [`IS_EXIT_STEAL_VIDEO`]
+    ///     * Additional reflection around the horizontal axis (OR-operation):
+    ///         * [`IS_SET_ROP_MIRROR_UPDOWN`]
+    ///         * [`IS_SET_ROP_MIRROR_UPDOWN_ODD`]
+    ///         * [`IS_SET_ROP_MIRROR_UPDOWN_EVEN`]
+    ///     * Steal-image size independent of the current settings (or-linked):
+    ///         * [`IS_USE_MEM_IMAGE_SIZE`]
+    /// * `StealColorMode` - Color mode with which the image should be stolen.
+    ///     (Color mode see [`is_SetColorMode`]). A corresponding image memory must be allocated.
+    ///
+    /// The number of images to the VGA card and main memory can be set in case of
+    /// [`IS_SET_STEAL_RATIO`] with parameter `StealColorMode`:
+    /// * Bits `31`…`24`: _reserved_
+    /// * Bits `23`…`16`: Number of frames to VGA card.
+    /// * Bits `15`…`8`: Number of frames to main memory.
+    /// * Bits `7`…`0`: Steal color mode.
+    ///
+    /// # Return values
+    /// * [`IS_NO_SUCCESS`]
+    /// * [`IS_SUCCESS`]
+    ///
+    /// # Obsolete replacement
+    /// * [`is_DirectRenderer`]
+    #[cfg(target_os = "windows")]
+    #[deprecated]
+    pub fn is_PrepareStealVideo(hCam: HIDS, Mode: INT, StealColorMode: ULONG) -> INT;
 }
