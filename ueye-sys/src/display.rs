@@ -4,7 +4,7 @@
 
 use crate::color::is_SetColorMode;
 use crate::constants::return_values::*;
-use crate::types::{long, HIDS, HWND, INT};
+use crate::types::{long, void, HIDS, HWND, INT};
 use bitflags::bitflags;
 
 bitflags! {
@@ -321,4 +321,30 @@ unsafe extern "C" {
     #[cfg(target_os = "windows")]
     #[deprecated]
     pub fn is_SetDisplaySize(hf: HIDS, x: INT, y: INT) -> INT;
+
+    /// Lock DirectDraw overlay memory.
+    ///
+    /// In DirectDraw mode [`is_LockDDOverlayMem`] gives access to the image memory and returns the
+    /// address pointer to the beginning of the image memory. And thus the overlay buffer can be
+    /// directly written to, without having to use the Windows GDI functions. `pPitch` returns the
+    /// line offset in bytes from the beginning of one line to the beginning of the following line.
+    /// Access must be disabled as soon as possible with the [`is_UnlockDDOverlayMem`] function.
+    /// Within a `LockDDMem` – `UnlockDDMem` block there are no updates of the back buffer on the
+    /// display.
+    ///
+    /// # Input parameters
+    /// * `hf` - Camera handle.
+    /// * `ppMem` - Pointer to variable, which will contain address pointer.
+    /// * `pPitch` - Pointer to variable, which will contain the pitch value.
+    ///
+    /// # Return values
+    /// * [`IS_NO_SUCCESS`]
+    /// * [`IS_SUCCESS`]
+    ///
+    /// # Obsolete replacement
+    /// * [`is_DirectRenderer`]
+    #[cfg(target_os = "windows")]
+    #[deprecated]
+    pub fn is_LockDDOverlayMem(hf: HIDS, ppMem: *mut *const void, pPitch: *mut INT) -> INT;
+
 }
