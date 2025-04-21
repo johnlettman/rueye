@@ -603,6 +603,28 @@ unsafe extern "C" {
     #[deprecated]
     pub fn is_HideDDOverlay(hf: HIDS) -> INT;
 
+    /// **Obsolete:** Determines whether the overlay in DirectDraw back buffer mode is scaled,
+    /// if the image is scaled, or not.
+    ///
+    /// If so, the quality of the overlay might be worse. Scaling is normally switched off.
+    ///
+    /// # Input parameters
+    /// * `hf` - Camera handle.
+    /// * `boScale` - Mode:
+    ///     * [`FALSE`] = No scaling.
+    ///     * [`TRUE`] = Scaling.
+    ///
+    /// # Return values
+    /// * _With [`IS_GET_DD_OVERLAY_SCALE`]:_ Current setting.
+    /// * [`IS_NO_SUCCESS`]
+    /// * [`IS_SUCCESS`]
+    ///
+    /// # Obsolete replacement
+    /// * [`is_DirectRenderer`]
+    #[cfg(target_os = "windows")]
+    #[deprecated]
+    pub fn is_ScaleDDOverlay(hf: HIDS, boScale: BOOL) -> INT;
+
     /// **Obsolete:** Returns the overlay buffer’s device context handle.
     ///
     /// Using this handle Windows GDI functions can access the overlay. All graphics commands such
