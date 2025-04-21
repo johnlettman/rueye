@@ -4,7 +4,7 @@
 
 use crate::color::is_SetColorMode;
 use crate::constants::return_values::*;
-use crate::types::{long, void, HDC, HIDS, HWND, INT};
+use crate::types::{long, void, BOOL, FALSE, HDC, HIDS, HWND, INT, TRUE};
 use bitflags::bitflags;
 
 /// Returns the R channel.
@@ -592,4 +592,23 @@ unsafe extern "C" {
     #[cfg(target_os = "windows")]
     #[deprecated]
     pub fn is_ReleaseDC(hf: HIDS, hDC: HDC) -> INT;
+
+    /// **Obsolete:** In overlay surface mode: switches off the overlay surface when the output
+    /// window is moved, its size is changed, or when other applications are activated.
+    ///
+    /// While the overlay surface is switched off, the standard background color of the window
+    /// is displayed.
+    ///
+    /// # Input parameters
+    /// * `hf` - Camera handle.
+    /// * `boMode` - Mode:
+    ///     * [`TRUE`] = Switch off overlay when window is moved, etc.
+    ///     * [`FALSE`] = Overlay always on (_default_).
+    ///
+    /// # Return values
+    /// * [`IS_NO_SUCCESS`]
+    /// * [`IS_SUCCESS`]
+    #[cfg(target_os = "windows")]
+    #[deprecated]
+    pub fn is_OvlSurfaceOffWhileMove(hf: HIDS, boMode: BOOL) -> INT;
 }
