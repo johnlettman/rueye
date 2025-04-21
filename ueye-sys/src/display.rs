@@ -365,4 +365,31 @@ unsafe extern "C" {
     #[deprecated]
     pub fn is_UnlockDDOverlayMem(hf: HIDS) -> INT;
 
+    /// **Obsolete:** Gives access to the image memory and returns the address pointer to the
+    /// beginning of the image memory.
+    ///
+    /// In most cases the image memory is on the VGA card. Using the pointer the image memory can
+    /// be accessed directly. Access is disabled with [`is_UnlockDDMem`] – this must be done as
+    /// soon as possible.
+    ///
+    /// Digitizing to memory cannot be terminated with [`is_LockDDMem`].
+    ///
+    /// When in DirectDraw back buffer mode, within a `LockDDMem` – `UnlockDDMem` block there are
+    /// no updates of the back buffer on the display.
+    ///
+    /// # Input parameters
+    /// * `hf` - Camera handle.
+    /// * `ppMem` - Pointer to variable, which will contain address pointer.
+    /// * `pPitch` - Pointer to variable, which will contain the pitch value.
+    ///
+    /// # Return values
+    /// * [`IS_NO_SUCCESS`]
+    /// * [`IS_SUCCESS`]
+    ///
+    /// # Obsolete replacement
+    /// * [`is_DirectRenderer`]
+    #[cfg(target_os = "windows")]
+    #[deprecated]
+    pub fn is_LockDDMem(hf: HIDS, ppMem: *mut *const void, pPitch: *mut INT) -> INT;
+
 }
