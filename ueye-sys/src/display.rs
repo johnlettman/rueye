@@ -19,7 +19,11 @@ const IS_GET_KC_BLUE: INT = 0x8002;
 /// Returns the RGB.
 const IS_GET_KC_RGB: INT = 0x8003;
 const IS_GET_KC_INDEX: INT = 0x8004;
+
+/// Returns the X offset.
 const IS_GET_KEYOFFSET_X: INT = 0x8000;
+
+/// Returns the Y offset.
 const IS_GET_KEYOFFSET_Y: INT = 0x8001;
 
 /// Initializes the manual steal mode.
@@ -485,6 +489,30 @@ unsafe extern "C" {
     #[cfg(target_os = "windows")]
     #[deprecated]
     pub fn is_SetKeyColor(hf: HIDS, r: INT, g: INT, b: INT) -> INT;
+
+    /// **Obsolete:** The position where the image is faded on can be moved by ±1 pixels in
+    /// X and Y directions.
+    ///
+    /// Normally it should not be necessary to perform a move, but this depends upon the type of
+    /// VGA card used and type of driver.
+    ///
+    /// # Input parameters
+    /// * `hf` - Camera handle.
+    /// * `nOffsetX` - X offset (_possible values: `-1`, `0`, `1`_) -- or:
+    ///     * [`IS_GET_KEYOFFSET_X`] = Returns the X offset.
+    ///     * [`IS_GET_KEYOFFSET_Y`] = Returns the Y offset.
+    /// * `nOffsetY` - Y offset (_possible values: `-1`, `0`, `1`_).
+    ///
+    /// # Return values
+    /// * _When called with [`IS_GET_KEYOFFSET_X`] and [`IS_GET_KEYOFFSET_Y`]:_ Current setting
+    /// * [`IS_NO_SUCCESS`]
+    /// * [`IS_SUCCESS`]
+    ///
+    /// # Obsolete replacement
+    /// * [`is_DirectRenderer`]
+    #[cfg(target_os = "windows")]
+    #[deprecated]
+    pub fn is_SetKeyOffset(hf: HIDS, nOffsetX: INT, nOffsetY: INT) -> INT;
 
     /// **Obsolete:** Sets the timer interval for the update cycle of the video image in
     /// DirectDraw mode.
