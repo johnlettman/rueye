@@ -661,7 +661,7 @@ unsafe extern "C" {
     /// primary surface mode.
     ///
     /// # Input parameters
-    /// * `hf` - Camera handle.
+    /// * `hCam` - Camera handle.
     /// * `boMode` - Initialization or deinitialization of the mode:
     ///     * Modes:
     ///         * [`IS_INIT_STEAL_VIDEO`]
@@ -694,4 +694,37 @@ unsafe extern "C" {
     #[cfg(target_os = "windows")]
     #[deprecated]
     pub fn is_PrepareStealVideo(hCam: HIDS, Mode: INT, StealColorMode: ULONG) -> INT;
+
+    /// **Obsolete:** Steals images from DirectDraw live mode.
+    ///
+    /// The set number of full frames after the call of the function is redirected to the allocated
+    /// image memory. Besides steal mode there is an automatic steal mode
+    /// (see [`is_PrepareStealVideo`]). Using the automatic steal mode the number of images, which
+    /// are transmitted alternately into the VGA card or into the main memory, can be set
+    /// separately within the range of `1`…`255`. After starting the automatic steal mode the first
+    /// image is sent to the VGA card, following alternate the adjusted number of frames into the
+    /// main memory and the VGA card.
+    ///
+    /// <div class="warning">
+    ///
+    /// [`is_StealVideo`] cannot be used in Direct3D mode.
+    ///
+    /// </div>
+    ///
+    /// # Input parameters
+    /// * `hf` - Camera handle.
+    /// * `Wait` - Mode:
+    ///     * [`IS_WAIT`] = Function waits until the image has been acquired.
+    ///     * [`IS_DONT_WAIT`] = Function returns immediately.
+    ///     * [`IS_EXIT_STEAL_VIDEO`] = Stops the automatic steal mode.
+    ///
+    /// # Return values
+    /// * [`IS_NO_SUCCESS`]
+    /// * [`IS_SUCCESS`]
+    ///
+    /// # Obsolete replacement
+    /// * [`is_DirectRenderer`]
+    #[cfg(target_os = "windows")]
+    #[deprecated]
+    pub fn is_StealVideo(hf: HIDS, Wait: INT) -> INT;
 }
