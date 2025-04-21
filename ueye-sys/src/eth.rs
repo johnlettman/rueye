@@ -1,9 +1,9 @@
 #![allow(non_camel_case_types)]
 
+use crate::constants::return_values::*;
+use crate::types::{void, BOOL, BYTE, DWORD, HCAM, INT, UINT, WORD};
 use std::fmt::Debug;
 use std::hash::Hash;
-use crate::types::{BOOL, BYTE, DWORD, HCAM, INT, UINT, WORD, void};
-use crate::constants::return_values::*;
 
 /// [`BYTE`]-wise IPv4 address representation structure.
 #[repr(C, packed(1))]
@@ -17,7 +17,10 @@ pub struct UEYE_ETH_ADDR_IPV4_by {
 
 impl PartialEq for UEYE_ETH_ADDR_IPV4_by {
     fn eq(&self, other: &UEYE_ETH_ADDR_IPV4_by) -> bool {
-        self.by1 == other.by1 && self.by2 == other.by2 && self.by3 == other.by3 && self.by4 == other.by4
+        self.by1 == other.by1
+            && self.by2 == other.by2
+            && self.by3 == other.by3
+            && self.by4 == other.by4
     }
 }
 
@@ -29,27 +32,34 @@ pub union UEYE_ETH_ADDR_IPV4 {
     pub by: UEYE_ETH_ADDR_IPV4_by,
 
     /// [`DWORD`] hexadecimal representation.
-    pub dwAddr: DWORD
+    pub dwAddr: DWORD,
 }
 
 impl Debug for UEYE_ETH_ADDR_IPV4 {
     fn fmt(&self, f: &mut std::fmt::Formatter) -> std::fmt::Result {
+        let dwAddr_aligned = unsafe { self.dwAddr };
+        let by = unsafe { self.by };
+
         f.debug_struct("UEYE_ETH_ADDR_IPV4")
-            .field("by", &self.by)
-            .field("dwAddr", &self.dwAddr)
+            .field("by", &by)
+            .field("dwAddr", &dwAddr_aligned)
             .finish()
     }
 }
 
 impl PartialEq for UEYE_ETH_ADDR_IPV4 {
     fn eq(&self, other: &UEYE_ETH_ADDR_IPV4) -> bool {
-        self.by.eq(&other.by)
+        let by = unsafe { self.by };
+        let other_by = unsafe { other.by };
+
+        by.eq(&other_by)
     }
 }
 
 impl Hash for UEYE_ETH_ADDR_IPV4 {
     fn hash<H: std::hash::Hasher>(&self, state: &mut H) {
-        self.by.hash(state);
+        let by = unsafe { self.by };
+        by.hash(state);
     }
 }
 
@@ -99,7 +109,6 @@ impl PartialEq for UEYE_ETH_IP_CONFIGURATION {
     }
 }
 
-
 /// Status word for current camera status.
 ///
 /// # Documentation
@@ -108,64 +117,64 @@ impl PartialEq for UEYE_ETH_IP_CONFIGURATION {
 #[repr(u32)]
 pub enum UEYE_ETH_DEVICESTATUS {
     /// Camera is ready to operate.
-    IS_ETH_DEVSTATUS_READY_TO_OPERATE=            0x00000001,
+    IS_ETH_DEVSTATUS_READY_TO_OPERATE = 0x00000001,
 
     /// Camera is testing current IP address.
-    IS_ETH_DEVSTATUS_TESTING_IP_CURRENT=          0x00000002,
+    IS_ETH_DEVSTATUS_TESTING_IP_CURRENT = 0x00000002,
 
     /// Camera is testing persistent IP address.
-    IS_ETH_DEVSTATUS_TESTING_IP_PERSISTENT=       0x00000004,
+    IS_ETH_DEVSTATUS_TESTING_IP_PERSISTENT = 0x00000004,
 
     /// Camera is testing auto config IP range.
-    IS_ETH_DEVSTATUS_TESTING_IP_RANGE=            0x00000008,
+    IS_ETH_DEVSTATUS_TESTING_IP_RANGE = 0x00000008,
 
     /// Current IP address already assigned on the network.
-    IS_ETH_DEVSTATUS_INAPPLICABLE_IP_CURRENT=     0x00000010,
+    IS_ETH_DEVSTATUS_INAPPLICABLE_IP_CURRENT = 0x00000010,
 
     /// Persistent IP address already assigned on the network.
-    IS_ETH_DEVSTATUS_INAPPLICABLE_IP_PERSISTENT=  0x00000020,
+    IS_ETH_DEVSTATUS_INAPPLICABLE_IP_PERSISTENT = 0x00000020,
 
     /// IP addresses of auto config IP range already assigned on the network.
-    IS_ETH_DEVSTATUS_INAPPLICABLE_IP_RANGE=       0x00000040,
+    IS_ETH_DEVSTATUS_INAPPLICABLE_IP_RANGE = 0x00000040,
 
     /// Camera has not been initialized (paired).
-    IS_ETH_DEVSTATUS_UNPAIRED=                    0x00000100,
+    IS_ETH_DEVSTATUS_UNPAIRED = 0x00000100,
 
     /// Camera is being initialized (paired).
-    IS_ETH_DEVSTATUS_PAIRING_IN_PROGRESS=         0x00000200,
+    IS_ETH_DEVSTATUS_PAIRING_IN_PROGRESS = 0x00000200,
 
     /// Camera has been initialized (paired).
-    IS_ETH_DEVSTATUS_PAIRED=                      0x00000400,
+    IS_ETH_DEVSTATUS_PAIRED = 0x00000400,
 
     /// Camera configured for 100 Mbits/s.
-    IS_ETH_DEVSTATUS_FORCE_100MBPS=               0x00001000,
+    IS_ETH_DEVSTATUS_FORCE_100MBPS = 0x00001000,
 
     /// Camera supports no uEye COM port.
-    IS_ETH_DEVSTATUS_NO_COMPORT=                  0x00002000,
+    IS_ETH_DEVSTATUS_NO_COMPORT = 0x00002000,
 
     /// Camera is receiving starter firmware.
-    IS_ETH_DEVSTATUS_RECEIVING_FW_STARTER=        0x00010000,
+    IS_ETH_DEVSTATUS_RECEIVING_FW_STARTER = 0x00010000,
 
     /// Camera is receiving runtime firmware.
-    IS_ETH_DEVSTATUS_RECEIVING_FW_RUNTIME=        0x00020000,
+    IS_ETH_DEVSTATUS_RECEIVING_FW_RUNTIME = 0x00020000,
 
     /// Runtime firmware cannot be used.
-    IS_ETH_DEVSTATUS_INAPPLICABLE_FW_RUNTIME=     0x00040000,
+    IS_ETH_DEVSTATUS_INAPPLICABLE_FW_RUNTIME = 0x00040000,
 
     /// Starter firmware cannot be used.
-    IS_ETH_DEVSTATUS_INAPPLICABLE_FW_STARTER=     0x00080000,
+    IS_ETH_DEVSTATUS_INAPPLICABLE_FW_STARTER = 0x00080000,
 
     /// Camera is rebooting runtime firmware.
-    IS_ETH_DEVSTATUS_REBOOTING_FW_RUNTIME=        0x00100000,
+    IS_ETH_DEVSTATUS_REBOOTING_FW_RUNTIME = 0x00100000,
 
     /// Camera is rebooting starter firmware.
-    IS_ETH_DEVSTATUS_REBOOTING_FW_STARTER=        0x00200000,
+    IS_ETH_DEVSTATUS_REBOOTING_FW_STARTER = 0x00200000,
 
     /// Camera is rebooting failsafe firmware.
-    IS_ETH_DEVSTATUS_REBOOTING_FW_FAILSAFE=       0x00400000,
+    IS_ETH_DEVSTATUS_REBOOTING_FW_FAILSAFE = 0x00400000,
 
     /// Checksum error (error `0`) in runtime firmware.
-    IS_ETH_DEVSTATUS_RUNTIME_FW_ERR0=             0x80000000
+    IS_ETH_DEVSTATUS_RUNTIME_FW_ERR0 = 0x80000000,
 }
 
 /// Heartbeat information transmitted periodically by a device.
@@ -260,19 +269,31 @@ pub struct UEYE_ETH_DEVICE_INFO_HEARTBEAT {
 
 impl Debug for UEYE_ETH_DEVICE_INFO_HEARTBEAT {
     fn fmt(&self, f: &mut std::fmt::Formatter) -> std::fmt::Result {
+        let abySerialNumber_aligned = self.abySerialNumber;
+        let byDeviceType_aligned = self.byDeviceType;
+        let byCameraID_aligned = self.byCameraID;
+        let wSensorID_aligned = self.wSensorID;
+        let wSizeImgMem_MB_aligned = self.wSizeImgMem_MB;
+        let dwVerStarterFirmware_aligned = self.dwVerStarterFirmware;
+        let dwVerRuntimeFirmware_aligned = self.dwVerRuntimeFirmware;
+        let dwStatus_aligned = self.dwStatus;
+        let wTemperature_aligned = self.wTemperature;
+        let wLinkSpeed_Mb_aligned = self.wLinkSpeed_Mb;
+        let wComportOffset_aligned = self.wComportOffset;
+
         f.debug_struct("UEYE_ETH_DEVICE_INFO_HEARTBEAT")
-            .field("abySerialNumber", &self.abySerialNumber)
-            .field("byDeviceType", &self.byDeviceType)
-            .field("byCameraID", &self.byCameraID)
-            .field("wSensorID", &self.wSensorID)
-            .field("wSizeImgMem_MB", &self.wSizeImgMem_MB)
-            .field("dwVerStarterFirmware", &self.dwVerStarterFirmware)
-            .field("dwVerRuntimeFirmware", &self.dwVerRuntimeFirmware)
-            .field("dwStatus", &self.dwStatus)
-            .field("wTemperature", &self.wTemperature)
-            .field("wLinkSpeed_Mb", &self.wLinkSpeed_Mb)
+            .field("abySerialNumber", &abySerialNumber_aligned)
+            .field("byDeviceType", &byDeviceType_aligned)
+            .field("byCameraID", &byCameraID_aligned)
+            .field("wSensorID", &wSensorID_aligned)
+            .field("wSizeImgMem_MB", &wSizeImgMem_MB_aligned)
+            .field("dwVerStarterFirmware", &dwVerStarterFirmware_aligned)
+            .field("dwVerRuntimeFirmware", &dwVerRuntimeFirmware_aligned)
+            .field("dwStatus", &dwStatus_aligned)
+            .field("wTemperature", &wTemperature_aligned)
+            .field("wLinkSpeed_Mb", &wLinkSpeed_Mb_aligned)
             .field("macDevice", &self.macDevice)
-            .field("wComportOffset", &self.wComportOffset)
+            .field("wComportOffset", &wComportOffset_aligned)
             .field("ipcfgPersistentIpCfg", &self.ipcfgPersistentIpCfg)
             .field("ipcfgCurrentIpCfg", &self.ipcfgCurrentIpCfg)
             .field("macPairedHost", &self.macPairedHost)
@@ -286,18 +307,42 @@ impl Debug for UEYE_ETH_DEVICE_INFO_HEARTBEAT {
 
 impl PartialEq for UEYE_ETH_DEVICE_INFO_HEARTBEAT {
     fn eq(&self, other: &UEYE_ETH_DEVICE_INFO_HEARTBEAT) -> bool {
-        self.abySerialNumber.eq(&other.abySerialNumber)
-            && self.byDeviceType.eq(&other.byDeviceType)
-            && self.byCameraID.eq(&other.byCameraID)
-            && self.wSensorID.eq(&other.wSensorID)
-            && self.wSizeImgMem_MB.eq(&other.wSizeImgMem_MB)
-            && self.dwVerStarterFirmware.eq(&other.dwVerStarterFirmware)
-            && self.dwVerRuntimeFirmware.eq(&other.dwVerRuntimeFirmware)
-            && self.dwStatus.eq(&other.dwStatus)
-            && self.wTemperature.eq(&other.wTemperature)
-            && self.wLinkSpeed_Mb.eq(&other.wLinkSpeed_Mb)
+        let abySerialNumber_aligned = self.abySerialNumber;
+        let byDeviceType_aligned = self.byDeviceType;
+        let byCameraID_aligned = self.byCameraID;
+        let wSensorID_aligned = self.wSensorID;
+        let wSizeImgMem_MB_aligned = self.wSizeImgMem_MB;
+        let dwVerStarterFirmware_aligned = self.dwVerStarterFirmware;
+        let dwVerRuntimeFirmware_aligned = self.dwVerRuntimeFirmware;
+        let dwStatus_aligned = self.dwStatus;
+        let wTemperature_aligned = self.wTemperature;
+        let wLinkSpeed_Mb_aligned = self.wLinkSpeed_Mb;
+        let wComportOffset_aligned = self.wComportOffset;
+
+        let other_abySerialNumber_aligned = other.abySerialNumber;
+        let other_byDeviceType_aligned = other.byDeviceType;
+        let other_byCameraID_aligned = other.byCameraID;
+        let other_wSensorID_aligned = other.wSensorID;
+        let other_wSizeImgMem_MB_aligned = other.wSizeImgMem_MB;
+        let other_dwVerStarterFirmware_aligned = other.dwVerStarterFirmware;
+        let other_dwVerRuntimeFirmware_aligned = other.dwVerRuntimeFirmware;
+        let other_dwStatus_aligned = other.dwStatus;
+        let other_wTemperature_aligned = other.wTemperature;
+        let other_wLinkSpeed_Mb_aligned = other.wLinkSpeed_Mb;
+        let other_wComportOffset_aligned = other.wComportOffset;
+
+        abySerialNumber_aligned.eq(&other_abySerialNumber_aligned)
+            && byDeviceType_aligned.eq(&other_byDeviceType_aligned)
+            && byCameraID_aligned.eq(&other_byCameraID_aligned)
+            && wSensorID_aligned.eq(&other_wSensorID_aligned)
+            && wSizeImgMem_MB_aligned.eq(&other_wSizeImgMem_MB_aligned)
+            && dwVerStarterFirmware_aligned.eq(&other_dwVerStarterFirmware_aligned)
+            && dwVerRuntimeFirmware_aligned.eq(&other_dwVerRuntimeFirmware_aligned)
+            && dwStatus_aligned.eq(&other_dwStatus_aligned)
+            && wTemperature_aligned.eq(&other_wTemperature_aligned)
+            && wLinkSpeed_Mb_aligned.eq(&other_wLinkSpeed_Mb_aligned)
             && self.macDevice.eq(&other.macDevice)
-            && self.wComportOffset.eq(&other.wComportOffset)
+            && wComportOffset_aligned.eq(&other_wComportOffset_aligned)
             && self.ipcfgPersistentIpCfg.eq(&other.ipcfgPersistentIpCfg)
             && self.ipcfgCurrentIpCfg.eq(&other.ipcfgCurrentIpCfg)
             && self.macPairedHost.eq(&other.macPairedHost)
@@ -308,7 +353,6 @@ impl PartialEq for UEYE_ETH_DEVICE_INFO_HEARTBEAT {
     }
 }
 
-
 /// Status word for driver-based camera management.
 ///
 /// # Documentation
@@ -317,61 +361,61 @@ impl PartialEq for UEYE_ETH_DEVICE_INFO_HEARTBEAT {
 #[repr(u32)]
 pub enum UEYE_ETH_CONTROLSTATUS {
     /// The camera is available.
-    IS_ETH_CTRLSTATUS_AVAILABLE =             0x00000001,
+    IS_ETH_CTRLSTATUS_AVAILABLE = 0x00000001,
 
     /// Camera has valid IP address and can be accessed over the network.
-    IS_ETH_CTRLSTATUS_ACCESSIBLE1 =           0x00000002,
+    IS_ETH_CTRLSTATUS_ACCESSIBLE1 = 0x00000002,
 
     /// Camera has no persistent IP address; the auto IP range is valid.
-    IS_ETH_CTRLSTATUS_ACCESSIBLE2 =           0x00000004,
+    IS_ETH_CTRLSTATUS_ACCESSIBLE2 = 0x00000004,
 
     /// Camera can be accessed over the network by its persistent IP address/
-    IS_ETH_CTRLSTATUS_PERSISTENT_IP_USED =    0x00000010,
+    IS_ETH_CTRLSTATUS_PERSISTENT_IP_USED = 0x00000010,
 
     /// Camera is compatible with the installed driver.
-    IS_ETH_CTRLSTATUS_COMPATIBLE =            0x00000020,
+    IS_ETH_CTRLSTATUS_COMPATIBLE = 0x00000020,
 
     /// DHCP is enabled on the PC network card.
-    IS_ETH_CTRLSTATUS_ADAPTER_ON_DHCP =       0x00000040,
+    IS_ETH_CTRLSTATUS_ADAPTER_ON_DHCP = 0x00000040,
 
     /// The PC network card setup is OK with respect to uEye needs.
-    IS_ETH_CTRLSTATUS_ADAPTER_SETUP_OK =      0x00000080,
+    IS_ETH_CTRLSTATUS_ADAPTER_SETUP_OK = 0x00000080,
 
     /// Camera is being closed on this PC.
     IS_ETH_CTRLSTATUS_UNPAIRING_IN_PROGRESS = 0x00000100,
 
     /// Camera is being initialized on this PC.
-    IS_ETH_CTRLSTATUS_PAIRING_IN_PROGRESS =   0x00000200,
+    IS_ETH_CTRLSTATUS_PAIRING_IN_PROGRESS = 0x00000200,
 
     /// Camera has been initialized on this PC.
-    IS_ETH_CTRLSTATUS_PAIRED =                0x00001000,
+    IS_ETH_CTRLSTATUS_PAIRED = 0x00001000,
 
     /// Camera has been opened on this PC.
-    IS_ETH_CTRLSTATUS_OPENED =                0x00004000,
+    IS_ETH_CTRLSTATUS_OPENED = 0x00004000,
 
     /// Starter firmware is being loaded onto the camera.
-    IS_ETH_CTRLSTATUS_FW_UPLOAD_STARTER =     0x00010000,
+    IS_ETH_CTRLSTATUS_FW_UPLOAD_STARTER = 0x00010000,
 
     /// Runtime firmware is being loaded onto the camera.
-    IS_ETH_CTRLSTATUS_FW_UPLOAD_RUNTIME =     0x00020000,
+    IS_ETH_CTRLSTATUS_FW_UPLOAD_RUNTIME = 0x00020000,
 
     /// Camera is rebooting.
-    IS_ETH_CTRLSTATUS_REBOOTING =             0x00100000,
+    IS_ETH_CTRLSTATUS_REBOOTING = 0x00100000,
 
     /// Boot-boosting is enabled for this camera.
-    IS_ETH_CTRLSTATUS_BOOTBOOST_ENABLED =     0x01000000,
+    IS_ETH_CTRLSTATUS_BOOTBOOST_ENABLED = 0x01000000,
 
     /// Boot-boosting is active for this camera.
-    IS_ETH_CTRLSTATUS_BOOTBOOST_ACTIVE =      0x02000000,
+    IS_ETH_CTRLSTATUS_BOOTBOOST_ACTIVE = 0x02000000,
 
     /// Camera has been initialized in the driver.
-    IS_ETH_CTRLSTATUS_INITIALIZED =           0x08000000,
+    IS_ETH_CTRLSTATUS_INITIALIZED = 0x08000000,
 
     /// Camera is being removed from driver management.
-    IS_ETH_CTRLSTATUS_TO_BE_DELETED =         0x40000000,
+    IS_ETH_CTRLSTATUS_TO_BE_DELETED = 0x40000000,
 
     /// Camera is being removed from driver management.
-    IS_ETH_CTRLSTATUS_TO_BE_REMOVED =         0x80000000,
+    IS_ETH_CTRLSTATUS_TO_BE_REMOVED = 0x80000000,
 }
 
 /// Control information for a listed camera.
@@ -397,9 +441,12 @@ pub struct UEYE_ETH_DEVICE_INFO_CONTROL {
 /// [`Debug`] implementation to avoid `reserved` fields.
 impl Debug for UEYE_ETH_DEVICE_INFO_CONTROL {
     fn fmt(&self, f: &mut std::fmt::Formatter) -> std::fmt::Result {
+        let dwDeviceID_aligned = self.dwDeviceID;
+        let dwControlStatus_aligned = self.dwControlStatus;
+
         f.debug_struct("UEYE_ETH_DEVICE_INFO_CONTROL")
-            .field("dwDeviceID", &self.dwDeviceID)
-            .field("dwControlStatus", &self.dwControlStatus)
+            .field("dwDeviceID", &dwDeviceID_aligned)
+            .field("dwControlStatus", &dwControlStatus_aligned)
             .finish()
     }
 }
@@ -407,7 +454,14 @@ impl Debug for UEYE_ETH_DEVICE_INFO_CONTROL {
 /// [`PartialEq`] implementation to avoid `reserved` fields.
 impl PartialEq for UEYE_ETH_DEVICE_INFO_CONTROL {
     fn eq(&self, other: &Self) -> bool {
-        self.dwDeviceID == other.dwDeviceID && self.dwControlStatus == other.dwControlStatus
+        let dwDeviceID_aligned = self.dwDeviceID;
+        let dwControlStatus_aligned = self.dwControlStatus;
+
+        let other_dwDeviceID_aligned = other.dwDeviceID;
+        let other_dwControlStatus_aligned = other.dwControlStatus;
+
+        dwDeviceID_aligned == other_dwDeviceID_aligned
+            && dwControlStatus_aligned == other_dwControlStatus_aligned
     }
 }
 
@@ -457,13 +511,13 @@ impl PartialEq for UEYE_ETH_AUTOCFG_IP_SETUP {
 #[repr(u16)]
 pub enum UEYE_ETH_PACKETFILTER_SETUP {
     /// Forward all packets to the operating system.
-    IS_ETH_PCKTFLT_PASSALL=       0,
+    IS_ETH_PCKTFLT_PASSALL = 0,
 
     /// Block GigE uEye data packets directed to the operating system (_recommended_).
-    IS_ETH_PCKTFLT_BLOCKUEGET=    1,
+    IS_ETH_PCKTFLT_BLOCKUEGET = 1,
 
     /// Block all packets directed to the operating system.
-    IS_ETH_PCKTFLT_BLOCKALL=      2
+    IS_ETH_PCKTFLT_BLOCKALL = 2,
 }
 
 /// Values for link speed setup.
@@ -474,10 +528,10 @@ pub enum UEYE_ETH_PACKETFILTER_SETUP {
 #[repr(u32)]
 pub enum UEYE_ETH_LINKSPEED_SETUP {
     /// 100 Mbits/s.
-    IS_ETH_LINKSPEED_100MB=       100,
+    IS_ETH_LINKSPEED_100MB = 100,
 
     /// 1000 Mbits/s.
-    IS_ETH_LINKSPEED_1000MB=      1000
+    IS_ETH_LINKSPEED_1000MB = 1000,
 }
 
 /// Control info for a camera's network adapter.
@@ -568,10 +622,8 @@ pub struct UEYE_ETH_DEVICE_INFO {
     pub infoAdapter: UEYE_ETH_ADAPTER_INFO,
 
     /// General driver data.
-    pub infoDriver: UEYE_ETH_DRIVER_INFO
+    pub infoDriver: UEYE_ETH_DRIVER_INFO,
 }
-
-
 
 unsafe extern "C" {
     /// Set the packet filter for a network adapter.
@@ -599,7 +651,6 @@ unsafe extern "C" {
     pub fn is_SetPacketFilter(iAdapterID: INT, uFilterSetting: UEYE_ETH_PACKETFILTER_SETUP) -> INT;
 }
 
-
 /// Enumeration of IP configuration capability flags.
 ///
 /// # Documentation
@@ -608,13 +659,13 @@ unsafe extern "C" {
 #[repr(u32)]
 pub enum IPCONFIG_CAPABILITY_FLAGS {
     /// Setting a persistent IP address is supported.
-    IPCONFIG_CAP_PERSISTENT_IP_SUPPORTED    = 0x01,
+    IPCONFIG_CAP_PERSISTENT_IP_SUPPORTED = 0x01,
 
     /// Automatic IP configuration by the network adapter is supported.
     IPCONFIG_CAP_DHCP_SUPPORTED = 0x02,
 
     /// Obtaining the IP address from a DHCP server is supported.
-    IPCONFIG_CAP_AUTOCONFIG_IP_SUPPORTED    = 0x04
+    IPCONFIG_CAP_AUTOCONFIG_IP_SUPPORTED = 0x04,
 }
 
 /// Enumeration of commands supported by the IP configuration access function [`is_IpConfig`].
@@ -630,7 +681,7 @@ pub enum IPCONFIG_CMD {
     /// Pointer to bit mask of type [`UINT`] returning the supported function modes:
     /// * [`IPCONFIG_CAPABILITY_FLAGS::IPCONFIG_CAP_PERSISTENT_IP_SUPPORTED`]
     /// * [`IPCONFIG_CAPABILITY_FLAGS::IPCONFIG_CAP_AUTOCONFIG_IP_SUPPORTED`]
-    IPCONFIG_CMD_QUERY_CAPABILITIES             = 0,
+    IPCONFIG_CMD_QUERY_CAPABILITIES = 0,
 
     /// Sets the persistent IP address and the subnet mask of the camera.
     ///
@@ -643,7 +694,7 @@ pub enum IPCONFIG_CMD {
     ///
     /// # Parameter type
     /// [`UEYE_ETH_IP_CONFIGURATION`]
-    IPCONFIG_CMD_SET_PERSISTENT_IP              = 0x01010000,
+    IPCONFIG_CMD_SET_PERSISTENT_IP = 0x01010000,
 
     /// Activates the DHCP functionality so that a camera obtains the IP address from a DHCP server.
     ///
@@ -656,7 +707,7 @@ pub enum IPCONFIG_CMD {
     ///
     /// # Parameter type
     /// [`IS_U32`], _with bit `0` as boolean active._
-    IPCONFIG_CMD_SET_DHCP_ENABLED               = 0x01020000,
+    IPCONFIG_CMD_SET_DHCP_ENABLED = 0x01020000,
 
     /// Sets the IP address range for automatic IP configuration.
     ///
@@ -670,7 +721,7 @@ pub enum IPCONFIG_CMD {
     ///
     /// # Parameter type
     /// [`UEYE_ETH_AUTOCFG_IP_SETUP`]
-    IPCONFIG_CMD_SET_AUTOCONFIG_IP              = 0x01040000,
+    IPCONFIG_CMD_SET_AUTOCONFIG_IP = 0x01040000,
 
     /// Sets the IP address range for automatic IP configuration via the device ID.
     ///
@@ -684,10 +735,10 @@ pub enum IPCONFIG_CMD {
     ///
     /// # Parameter type
     /// [`UEYE_ETH_AUTOCFG_IP_SETUP`]
-    IPCONFIG_CMD_SET_AUTOCONFIG_IP_BYDEVICE     = 0x01040100,
+    IPCONFIG_CMD_SET_AUTOCONFIG_IP_BYDEVICE = 0x01040100,
 
     /// (**reserved**)
-    IPCONFIG_CMD_RESERVED1                      = 0x01080000,
+    IPCONFIG_CMD_RESERVED1 = 0x01080000,
 
     /// Returns the persistent IP address and the subnet mask of the camera.
     ///
@@ -696,7 +747,7 @@ pub enum IPCONFIG_CMD {
     ///
     /// # Parameter type
     /// [`UEYE_ETH_IP_CONFIGURATION`]
-    IPCONFIG_CMD_GET_PERSISTENT_IP              = 0x02010000,
+    IPCONFIG_CMD_GET_PERSISTENT_IP = 0x02010000,
 
     /// Returns if the DHCP functionality is enabled.
     ///
@@ -714,7 +765,7 @@ pub enum IPCONFIG_CMD {
     ///
     /// # Parameter type
     /// [`UEYE_ETH_AUTOCFG_IP_SETUP`]
-    IPCONFIG_CMD_GET_AUTOCONFIG_IP              = 0x02040000,
+    IPCONFIG_CMD_GET_AUTOCONFIG_IP = 0x02040000,
 
     /// Returns the IP address range for automatic IP configuration via the device ID.
     ///
@@ -723,7 +774,7 @@ pub enum IPCONFIG_CMD {
     ///
     /// # Parameter type
     /// [`UEYE_ETH_AUTOCFG_IP_SETUP`]
-    IPCONFIG_CMD_GET_AUTOCONFIG_IP_BYDEVICE     = 0x02040100
+    IPCONFIG_CMD_GET_AUTOCONFIG_IP_BYDEVICE = 0x02040100,
 }
 
 unsafe extern "C" {
@@ -793,5 +844,11 @@ unsafe extern "C" {
     ///
     /// # Documentation
     /// [`is_IpConfig`](https://www.1stvision.com/cameras/IDS/IDS-manuals/uEye_Manual/is_ipconfig.html)
-    pub fn is_IpConfig(iID: INT, mac: UEYE_ETH_ADDR_MAC, nCommand: IPCONFIG_CMD, pParam: *mut void, cbSizeOfParam: UINT) -> INT;
+    pub fn is_IpConfig(
+        iID: INT,
+        mac: UEYE_ETH_ADDR_MAC,
+        nCommand: IPCONFIG_CMD,
+        pParam: *mut void,
+        cbSizeOfParam: UINT,
+    ) -> INT;
 }
