@@ -482,7 +482,7 @@ unsafe extern "C" {
     #[deprecated]
     pub fn is_SetDDUpdateTime(hf: HIDS, ms: INT) -> INT;
 
-    /// Activates the live overlay mode.
+    /// **Obsolete:** Activates the live overlay mode.
     ///
     /// In overlay mode three non-visible image buffers are used: Back buffer, overlay buffer and
     /// mix buffer. The video image is digitized in the back buffer. The graphics data can be
@@ -514,7 +514,7 @@ unsafe extern "C" {
     #[deprecated]
     pub fn is_EnableDDOverlay(hf: HIDS) -> INT;
 
-    /// Fades on the overlay in DirectDraw back buffer mode.
+    /// **Obsolete:** Fades on the overlay in DirectDraw back buffer mode.
     ///
     /// The last data received in the overlay buffer will be displayed. The display is created with
     /// only three image buffers. Depending upon the VGA card, the image refresh can be smaller
@@ -532,4 +532,23 @@ unsafe extern "C" {
     #[cfg(target_os = "windows")]
     #[deprecated]
     pub fn is_ShowDDOverlay(hf: HIDS) -> INT;
+
+    /// **Obsolete:** Fades out the overlay in DirectDraw back buffer mode.
+    ///
+    /// Then only the image buffer is displayed, so that the image refresh frequency is higher than
+    /// then the overlay, which is being superimposed. When the overlay is faded out the overlay
+    /// data is not lost.
+    ///
+    /// # Input parameters
+    /// * `hf` - Camera handle.
+    ///
+    /// # Return values
+    /// * [`IS_NO_SUCCESS`]
+    /// * [`IS_SUCCESS`]
+    ///
+    /// # Obsolete replacement
+    /// * [`is_DirectRenderer`]
+    #[cfg(target_os = "windows")]
+    #[deprecated]
+    pub fn is_HideDDOverlay(hf: HIDS) -> INT;
 }
