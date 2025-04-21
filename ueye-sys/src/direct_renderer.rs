@@ -26,30 +26,14 @@
 
 #![allow(non_camel_case_types)]
 
-use crate::constants::{live_freeze::*, return_values::*};
+use crate::constants::return_values::*;
 use crate::types::{void, HIDS, HWND, INT, UINT};
-use bitflags::bitflags;
 
 #[derive(Debug)]
 #[repr(C)]
 pub struct OPENGL_DISPLAY {
     pub nWindowID: INT,
     pub pDisplay: *mut void,
-}
-
-bitflags! {
-    /// Direct rendering support flags (_supports bitmask_)
-    #[derive(Debug, Copy, Clone, Hash, PartialEq, Eq)]
-    #[repr(transparent)]
-    pub struct IS_SET_DM_SUPPORT: UINT {
-        const IS_SET_DM_DIB = 1;
-
-        /// Tests if Direct3D is supported.
-        const IS_SET_DM_DIRECT3D = 4;
-
-        /// Tests if OpenGL is supported.
-        const IS_SET_DM_OPENGL = 8;
-    }
 }
 
 /// Enumeration of commands for [`is_DirectRenderer`].
