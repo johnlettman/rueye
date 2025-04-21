@@ -154,6 +154,40 @@ pub enum IS_CBARS_MODE {
     IS_SET_CBARS_ON = 1,
 }
 
+bitflags! {
+    /// Vert filters (_supports bitmask_).
+    #[derive(Debug, Copy, Clone, PartialEq, Eq, Hash)]
+    #[repr(transparent)]
+    pub struct IS_VERT_FILTER_MODE: INT {
+        /// Return the current setting.
+        const IS_GET_VERT_FILTER_MODE = 0x8000;
+
+        /// Return the current setting.
+        const IS_GET_VERT_FILTER_STEP = 0x8001;
+
+        /// Disable filter.
+        const IS_DISABLE_VERT_FILTER = 0;
+
+        /// Enable filter.
+        const IS_ENABLE_VERT_FILTER = 1;
+
+        /// Filter level 1 (weak filter).
+        const IS_VERT_FILTER_STEP1 = 2;
+
+        /// Filter level 2.
+        const IS_VERT_FILTER_STEP2 = 4;
+
+        /// Filter level 3 (strong filter).
+        const IS_VERT_FILTER_STEP3 = 6;
+    }
+}
+
+impl IS_VERT_FILTER_MODE {
+    pub const fn STEP(s: INT) -> INT {
+        (s + 1) << 1
+    }
+}
+
 unsafe extern "C" {
     /// Output an image from an image memory in the specified window.
     ///
@@ -792,7 +826,7 @@ unsafe extern "C" {
     #[deprecated]
     pub fn is_StealVideo(hf: HIDS, Wait: INT) -> INT;
 
-    /// Displays color bars on your monitor.
+    /// **Obsolete:** Displays color bars on your monitor.
     ///
     /// Depending upon your display mode, these will appear in either monochrome or color.
     /// The color bars are produced by the FALCON/EAGLE with the color bar generator. These can be
@@ -811,4 +845,26 @@ unsafe extern "C" {
     #[cfg(target_os = "windows")]
     #[deprecated]
     pub fn is_ShowColorBars(hf: HIDS, Mode: IS_CBARS_MODE) -> INT;
+
+    /// **Obsolete:** Activate the vertical interpolation filter.
+    ///
+    /// This function is only useful when image scaling is switched on. To select a filter level,
+    /// the bitwise operator OR is linked to IS_ENABLE_VERT_FILTER. Only level 1 is allowed at all
+    /// resolutions for the vertical filters. Level 2 works to a maximum horizontal resolution of
+    /// 385 pixel points and level 3 to a maximum horizontal resolution of 193 image points.
+    ///
+    /// # Input parameters
+    /// * `hf` - Camera handle.
+    /// * `Mode` - Mode. See [`IS_VERT_FILTER_MODE`].
+    ///
+    /// # Return values
+    /// * _When called with
+    ///     [`IS_GET_VERT_FILTER_MODE`][IS_VERT_FILTER_MODE::IS_GET_VERT_FILTER_MODE] or
+    ///     [`IS_GET_VERT_FILTER_STEP`][IS_VERT_FILTER_MODE::IS_GET_VERT_FILTER_STEP]:_
+    ///     Current setting.
+    /// * [`IS_NO_SUCCESS`]
+    /// * [`IS_SUCCESS`]
+    #[cfg(target_os = "windows")]
+    #[deprecated]
+    pub fn is_SetVertFilter(hf: HIDS, Mode: IS_VERT_FILTER_MODE) -> INT;
 }
