@@ -573,4 +573,23 @@ unsafe extern "C" {
     #[cfg(target_os = "windows")]
     #[deprecated]
     pub fn is_GetDC(hf: HIDS, phDC: *mut HDC) -> INT;
+
+    /// **Obsolete:** Releases the overlay buffer’s device context handle.
+    ///
+    /// Once the handle has been released, an update of the overlay buffer on the display follows
+    /// (if the overlay has been blended on with [`is_ShowDDOverlay`]).
+    ///
+    /// # Input parameters
+    /// * `hf` - Camera handle.
+    /// * `hDC` - Device context handle from [`is_GetDC`].
+    ///
+    /// # Return values
+    /// * [`IS_NO_SUCCESS`]
+    /// * [`IS_SUCCESS`]
+    ///
+    /// # Obsolete replacement
+    /// * [`is_DirectRenderer`]
+    #[cfg(target_os = "windows")]
+    #[deprecated]
+    pub fn is_ReleaseDC(hf: HIDS, hDC: HDC) -> INT;
 }
