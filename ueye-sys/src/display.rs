@@ -392,4 +392,21 @@ unsafe extern "C" {
     #[deprecated]
     pub fn is_LockDDMem(hf: HIDS, ppMem: *mut *const void, pPitch: *mut INT) -> INT;
 
+    /// **Obsolete:** Disables access to the image memory in DirectDraw mode.
+    ///
+    /// Then the contents of the back buffer are updated on the display.
+    ///
+    /// # Input parameters
+    /// * `hf` - Camera handle.
+    ///
+    /// # Return values
+    /// * [`IS_NO_SUCCESS`]
+    /// * [`IS_SUCCESS`]
+    ///
+    /// # Obsolete replacement
+    /// * [`is_DirectRenderer`]
+    #[cfg(target_os = "windows")]
+    #[deprecated]
+    pub fn is_UnlockDDMem(hf: HIDS) -> INT;
+
 }
