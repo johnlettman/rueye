@@ -7,6 +7,21 @@ use crate::constants::return_values::*;
 use crate::types::{long, void, HIDS, HWND, INT};
 use bitflags::bitflags;
 
+/// Returns the R channel.
+const IS_GET_KC_RED: INT = 0x8000;
+
+/// Returns the G channel.
+const IS_GET_KC_GREEN: INT = 0x8001;
+
+/// Returns the B channel.
+const IS_GET_KC_BLUE: INT = 0x8002;
+
+/// Returns the RGB.
+const IS_GET_KC_RGB: INT = 0x8003;
+const IS_GET_KC_INDEX: INT = 0x8004;
+const IS_GET_KEYOFFSET_X: INT = 0x8000;
+const IS_GET_KEYOFFSET_Y: INT = 0x8001;
+
 bitflags! {
     /// Render modes for [`is_RenderBitmap`].
     ///
@@ -409,4 +424,93 @@ unsafe extern "C" {
     #[deprecated]
     pub fn is_UnlockDDMem(hf: HIDS) -> INT;
 
+    /// **Obsolete:** Returns the pointer to the internal DirectDraw surface, and thus, functions
+    /// from the DirectDraw surface interface can be used.
+    ///
+    /// # Input parameters
+    /// * `hf` - Camera handle.
+    /// * `ppDDSurf` - Contains pointer to the DirectDraw surface interface.
+    ///
+    /// # Return values
+    /// * [`IS_NO_SUCCESS`]
+    /// * [`IS_SUCCESS`]
+    ///
+    /// # Obsolete replacement
+    /// * [`is_DirectRenderer`]
+    #[cfg(target_os = "windows")]
+    #[deprecated]
+    pub fn is_GetDDOvlSurface(hf: HIDS, ppDDSurf: *mut *const void) -> INT;
+
+    /// **Obsolete:** Identify the keying color for the DirectDraw overlay surface mode.
+    ///
+    /// # Input parameters
+    /// * `hf` - Camera handle.
+    ///     * [`IS_GET_KC_RED`] = Returns the R channel.
+    ///     * [`IS_GET_KC_GREEN`] = Returns the G channel.
+    ///     * [`IS_GET_KC_BLUE`] = Returns the B channel.
+    ///     * [`IS_GET_KC_RGB`] = Returns the RGB.
+    /// * `r` - Red channel of keying color (`0`…`255`).
+    /// * `g` - Green channel of keying color (`0`…`255`).
+    /// * `b` - Blue channel of keying color (`0`…`255`).
+    ///
+    /// # Return values
+    /// * [`IS_NO_SUCCESS`]
+    /// * [`IS_SUCCESS`]
+    ///
+    /// # Obsolete replacement
+    /// * [`is_DirectRenderer`]
+    #[cfg(target_os = "windows")]
+    #[deprecated]
+    pub fn is_SetKeyColor(hf: HIDS, r: INT, g: INT, b: INT) -> INT;
+
+    /// **Obsolete:** Sets the timer interval for the update cycle of the video image in
+    /// DirectDraw mode.
+    ///
+    /// Valid values are between 20 ms and 2000 ms (20 ms is unrealistic).
+    ///
+    /// # Input parameters
+    /// * `hf` - Camera handle.
+    /// * `ms` - Time in milliseconds.
+    ///
+    /// # Return values
+    /// * [`IS_NO_SUCCESS`]
+    /// * [`IS_SUCCESS`]
+    ///
+    /// # Obsolete replacement
+    /// * [`is_DirectRenderer`]
+    #[cfg(target_os = "windows")]
+    #[deprecated]
+    pub fn is_SetDDUpdateTime(hf: HIDS, ms: INT) -> INT;
+
+    /// Activates the live overlay mode.
+    ///
+    /// In overlay mode three non-visible image buffers are used: Back buffer, overlay buffer and
+    /// mix buffer. The video image is digitized in the back buffer. The graphics data can be
+    /// written in the overlay buffer and thus the overlay data is overlaid on the video image in
+    /// the mix buffer. The mix buffer is then copied to the visible area of the VGA card.
+    /// The size of the three buffers is:
+    /// ```txt
+    /// video_x * video_y * color depth (in bytes per pixel)
+    /// ```
+    ///
+    /// The driver tries to allocate the buffer directly on the VGA card, (making best use of the
+    /// high speed image transfer that the VGA card can offer) when mixing the three buffers.
+    /// If the buffer cannot be allocated in the VGA card, then it must be stored in the
+    /// system memory. The image transfer from the system memory is slower and, depending on the
+    /// graphics card, sometimes not at all possible. The overlay is not always faded on.
+    /// It has to be made visible with [`is_ShowDDOverlay`]. As its key color, the overlay uses
+    /// black, and thus an overlay cannot contain any black color.
+    ///
+    /// # Input parameters
+    /// * `hf` - Camera handle.
+    ///
+    /// # Return values
+    /// * [`IS_NO_SUCCESS`]
+    /// * [`IS_SUCCESS`]
+    ///
+    /// # Obsolete replacement
+    /// * [`is_DirectRenderer`]
+    #[cfg(target_os = "windows")]
+    #[deprecated]
+    pub fn is_EnableDDOverlay(hf: HIDS) -> INT;
 }
