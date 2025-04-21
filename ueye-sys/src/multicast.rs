@@ -59,7 +59,7 @@ bitflags! {
         const IS_AMC_SUPPORTED_FLAG_DEVICE = 0x0001;
 
         /// The camera firmware supports the multicast mode (depends on the firmware version).
-        const IS_AMC_SUPPORTED_FLAG_DEVICE = 0x0002;
+        const IS_AMC_SUPPORTED_FLAG_FIRMWARE = 0x0002;
     }
 }
 

@@ -22,7 +22,8 @@
 
 #![allow(non_camel_case_types)]
 
-use crate::constants::{return_values::*, IMG};
+use crate::constants::{return_values::*};
+use crate::constants::image::IMG;
 use crate::types::{char, void, wchar_t, BYTE, HCAM, INT, NULL, UINT};
 
 /// Image file parameters for [`is_ImageFile`].

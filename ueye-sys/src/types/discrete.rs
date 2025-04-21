@@ -2,7 +2,7 @@
 // Standard C types
 pub use std::ffi::{
     c_char as char, c_double as double, c_float as float, c_int as INT, c_long as long, c_longlong,
-    c_str as STRING, c_uchar as BYTE, c_uint as UINT, c_ulong as ULONG, c_void as void,
+    c_uchar as BYTE, c_uint as UINT, c_ulong as ULONG, c_void as void,
 };
 
 pub const INFINITE_UINT: UINT = UINT::MAX;
@@ -37,6 +37,7 @@ pub type DWORD = u32;
 pub type WORD = u16;
 
 pub type CHAR = char;
+pub type STRING = *mut char;
 
 pub type BOOL = u32;
 pub const TRUE: BOOL = 1;

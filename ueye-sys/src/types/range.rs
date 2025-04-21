@@ -75,7 +75,7 @@ impl Ord for IS_RANGE_S32 {
 }
 
 /// Range with increments, [`double`].
-#[derive(Debug, Copy, Clone)]
+#[derive(Debug, Copy, Clone, PartialEq)]
 #[repr(C)]
 pub struct IS_RANGE_F64 {
     pub f64Min: double,
@@ -90,28 +90,10 @@ impl IS_RANGE_F64 {
     }
 }
 
-impl PartialEq for IS_RANGE_F64 {
-    #[inline]
-    fn eq(&self, other: &Self) -> bool {
-        (self.f64Min - other.f64Min).abs() <= double::EPSILON
-            && (self.f64Max - other.f64Max).abs() <= double::EPSILON
-            && (self.f64Inc - other.f64Inc).abs() <= double::EPSILON
-    }
-}
-
-impl Eq for IS_RANGE_F64 {}
-
 impl PartialOrd for IS_RANGE_F64 {
     #[inline]
     fn partial_cmp(&self, other: &Self) -> Option<std::cmp::Ordering> {
         self.size().partial_cmp(&other.size())
-    }
-}
-
-impl Ord for IS_RANGE_F64 {
-    #[inline]
-    fn cmp(&self, other: &Self) -> std::cmp::Ordering {
-        self.size().cmp(&other.size())
     }
 }
 

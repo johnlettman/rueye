@@ -92,6 +92,8 @@ bitflags! {
 
         /// 15V with 1A for peripheral devices.
         const IS_POWER_DELIVERY_PROFILE_15V           = 0x00000020;
+
+        const _ = !0;
     }
 }
 
@@ -105,7 +107,7 @@ impl Default for IS_POWER_DELIVERY_PROFILES {
 impl IS_POWER_DELIVERY_PROFILES {
     pub const fn voltage(&self) -> f32 {
         match *self {
-            IS_POWER_DELIVERY_PROFILES::IS_POWER_DELIVERY_PROFILE_INVALID => 0.0,
+            IS_POWER_DELIVERY_PROFILES::IS_POWER_DELIVERY_PROFILE_INVALID | _ => 0.0,
             IS_POWER_DELIVERY_PROFILES::IS_POWER_DELIVERY_PROFILE_5V_LOW_POWER
             | IS_POWER_DELIVERY_PROFILES::IS_POWER_DELIVERY_PROFILE_5V_HIGH_POWER => 5.0,
             IS_POWER_DELIVERY_PROFILES::IS_POWER_DELIVERY_PROFILE_9V => 9.0,
