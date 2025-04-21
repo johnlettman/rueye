@@ -120,3 +120,29 @@ unsafe extern "C" {
 pub const fn split_version(version: INT) -> (INT, INT, INT) {
     ((version >> 24) & 0xFF, (version >> 16) & 0xFF, version & 0xFFFF)
 }
+
+/// Stringify the version number from [`is_GetDLLVersion`].
+///
+/// # Examples
+/// ```rust
+/// use ueye_sys::meta::get_version_string;
+/// use ueye_sys::types::INT;
+///
+/// // Example version number from `is_GetDLLVersion`.
+/// let version: INT = 73404305;
+///
+/// // Split it!
+/// let version_string = get_version_string(version);
+///
+/// assert_eq!(version_string, "4.96.3985");
+/// ```
+///
+/// # Input parameters
+/// * `version` - Version number from [`is_GetDLLVersion`].
+///
+/// # Return values
+/// Version [`String`]
+pub const fn get_version_string(version: INT) -> String {
+    let (major, minor, build) = split_version(version);
+    format!("{major}.{minor}.{build}")
+}
