@@ -89,10 +89,3 @@ unsafe extern "C" {
     pub fn is_GetOsVersion() -> IS_OS;
 
 }
-
-#[test]
-fn test() {
-    let os = unsafe { is_GetOsVersion() };
-
-    println!("Hello, world! {os:?}");
-}
