@@ -140,6 +140,20 @@ bitflags! {
     }
 }
 
+/// Enumeration of color bar modes.
+#[derive(Debug, Copy, Clone, PartialEq, Eq, Hash)]
+#[repr(i32)]
+pub enum IS_CBARS_MODE {
+    /// Returns the current setting.
+    IS_GET_CBARS_MODE = 0x8000,
+
+    /// Disables the color bar generator.
+    IS_SET_CBARS_OFF = 0,
+
+    /// Enables the color bar generator.
+    IS_SET_CBARS_ON = 1,
+}
+
 unsafe extern "C" {
     /// Output an image from an image memory in the specified window.
     ///
@@ -777,4 +791,24 @@ unsafe extern "C" {
     #[cfg(target_os = "windows")]
     #[deprecated]
     pub fn is_StealVideo(hf: HIDS, Wait: INT) -> INT;
+
+    /// Displays color bars on your monitor.
+    ///
+    /// Depending upon your display mode, these will appear in either monochrome or color.
+    /// The color bars are produced by the FALCON/EAGLE with the color bar generator. These can be
+    /// used to check that the frame grabber is working in harmony with your computer. The color
+    /// bar generator displays an onboard video source.
+    ///
+    /// # Input parameters
+    /// * `hf` - Camera handle.
+    /// * `Mode` - Mode. See [`IS_CBARS_MODE`].
+    ///
+    /// # Return values
+    /// * _When called with [`IS_GET_CBARS_MODE`][IS_CBARS_MODE::IS_GET_CBARS_MODE]:_
+    ///     Current setting.
+    /// * [`IS_NO_SUCCESS`]
+    /// * [`IS_SUCCESS`]
+    #[cfg(target_os = "windows")]
+    #[deprecated]
+    pub fn is_ShowColorBars(hf: HIDS, Mode: IS_CBARS_MODE) -> INT;
 }
