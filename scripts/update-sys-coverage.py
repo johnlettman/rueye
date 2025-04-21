@@ -56,8 +56,14 @@ def extract_rust_fns(fd: Union[str, TextIO]) -> Generator[FunctionMatch, None, N
 
 def dump_fns_md(d: FunctionDict) -> Generator[str, None, None]:
     for name, fn in d.items():
-        check = "x" if fn.rust else " "
-        yield f"* [{check}] `{name}` (`{fn.arguments}`) ⇝ `{fn.returns}`\n"
+        if fn.rust:
+            check = "x"
+            warn = ""
+        else:
+            check = " "
+            warn = "**⚠**"
+
+        yield f"* [{check}] {warn}`{name}` (`{fn.arguments}`) ⇝ `{fn.returns}`\n"
 
 
 def get_parser() -> argparse.ArgumentParser:
