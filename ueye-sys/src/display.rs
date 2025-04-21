@@ -4,7 +4,7 @@
 
 use crate::color::is_SetColorMode;
 use crate::constants::return_values::*;
-use crate::types::{long, void, HIDS, HWND, INT};
+use crate::types::{long, void, HDC, HIDS, HWND, INT};
 use bitflags::bitflags;
 
 /// Returns the R channel.
@@ -551,4 +551,26 @@ unsafe extern "C" {
     #[cfg(target_os = "windows")]
     #[deprecated]
     pub fn is_HideDDOverlay(hf: HIDS) -> INT;
+
+    /// **Obsolete:** Returns the overlay buffer’s device context handle.
+    ///
+    /// Using this handle Windows GDI functions can access the overlay. All graphics commands such
+    /// as `line`, `circle`, `rectangle` and `text` out from Windows are available. The device
+    /// context handle must be released as soon as possible with the [`is_ReleaseDC`] function.
+    /// Within the `GetDC` - `ReleaseDC` blocks there are no updates of the overlay buffer on the
+    /// display.
+    ///
+    /// # Input parameters
+    /// * `hf` - Camera handle.
+    /// * `phDC` - Pointer to the variable, which the device handle takes over.
+    ///
+    /// # Return values
+    /// * [`IS_NO_SUCCESS`]
+    /// * [`IS_SUCCESS`]
+    ///
+    /// # Obsolete replacement
+    /// * [`is_DirectRenderer`]
+    #[cfg(target_os = "windows")]
+    #[deprecated]
+    pub fn is_GetDC(hf: HIDS, phDC: *mut HDC) -> INT;
 }
