@@ -89,3 +89,34 @@ unsafe extern "C" {
     pub fn is_GetOsVersion() -> IS_OS;
 
 }
+
+/// Split the version number from [`is_GetDLLVersion`] into its components.
+///
+/// # Examples
+/// ```rust
+/// use ueye_sys::meta::split_version;
+/// use ueye_sys::types::INT;
+///
+/// // Example version number from `is_GetDLLVersion`.
+/// let version: INT = 73404305;
+///
+/// // Split it!
+/// let (major, minor, build) = split_version(version);
+///
+/// assert_eq!(major, 4);
+/// assert_eq!(minor, 96);
+/// assert_eq!(build, 3985);
+/// ```
+///
+/// # Input parameters
+/// * `version` - Version number from [`is_GetDLLVersion`].
+///
+/// # Return values
+/// _Tuple of:_
+/// * Major version
+/// * Minor version
+/// * Build version
+#[inline]
+pub const fn split_version(version: INT) -> (INT, INT, INT) {
+    ((version >> 24) & 0xFF, (version >> 16) & 0xFF, version & 0xFFFF)
+}
