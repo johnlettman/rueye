@@ -322,7 +322,7 @@ unsafe extern "C" {
     #[deprecated]
     pub fn is_SetDisplaySize(hf: HIDS, x: INT, y: INT) -> INT;
 
-    /// Lock DirectDraw overlay memory.
+    /// **Obsolete:** Enables access to the overlay buffer in DirectDraw back buffer mode.
     ///
     /// In DirectDraw mode [`is_LockDDOverlayMem`] gives access to the image memory and returns the
     /// address pointer to the beginning of the image memory. And thus the overlay buffer can be
@@ -346,5 +346,23 @@ unsafe extern "C" {
     #[cfg(target_os = "windows")]
     #[deprecated]
     pub fn is_LockDDOverlayMem(hf: HIDS, ppMem: *mut *const void, pPitch: *mut INT) -> INT;
+
+    /// **Obsolete:** Disables access to the overlay buffer in DirectDraw back buffer mode.
+    ///
+    /// The contents of the overlay buffer are updated on the display
+    /// (if [`is_ShowDDOverlay`] has faded on the overlay).
+    ///
+    /// # Input parameters
+    /// * `hf` - Camera handle.
+    ///
+    /// # Return values
+    /// * [`IS_NO_SUCCESS`]
+    /// * [`IS_SUCCESS`]
+    ///
+    /// # Obsolete replacement
+    /// * [`is_DirectRenderer`]
+    #[cfg(target_os = "windows")]
+    #[deprecated]
+    pub fn is_UnlockDDOverlayMem(hf: HIDS) -> INT;
 
 }
