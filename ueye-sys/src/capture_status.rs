@@ -1,0 +1,27 @@
+
+
+
+pub enum UEYE_CAPTURE_STATUS {
+    IS_CAP_STATUS_API_NO_DEST_MEM           =   0xa2,
+    IS_CAP_STATUS_API_CONVERSION_FAILED     =   0xa3,
+    IS_CAP_STATUS_API_IMAGE_LOCKED          =   0xa5,
+
+    IS_CAP_STATUS_DRV_OUT_OF_BUFFERS        =   0xb2,
+    IS_CAP_STATUS_DRV_DEVICE_NOT_READY      =   0xb4,
+
+    IS_CAP_STATUS_TRANSFER_FAILED           =   0xc7,
+
+    IS_CAP_STATUS_DEV_MISSED_IMAGES         =   0xe5,
+    IS_CAP_STATUS_DEV_TIMEOUT               =   0xd6,
+    IS_CAP_STATUS_DEV_FRAME_CAPTURE_FAILED  =   0xd9,
+
+    IS_CAP_STATUS_ETH_BUFFER_OVERRUN        =   0xe4,
+}
+
+#[derive(Debug, Copy, Clone, PartialEq, Eq, Hash)]
+#[repr(u32)]
+pub enum IS_CAPTURE_STATUS_CMD {
+    IS_CAPTURE_STATUS_INFO_CMD_RESET = 1,
+    IS_CAPTURE_STATUS_INFO_CMD_GET   = 2,
+    IS_CAPTURE_STATUS_CRC_ERROR_COUNT_GET  = 3
+}
